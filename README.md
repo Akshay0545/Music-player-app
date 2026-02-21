@@ -56,6 +56,3 @@ npx expo run:android
 - **Queue:** Add from Home (tap song to play, or “+ Queue”), reorder (up/down), remove; persisted across restarts.
 - **Bonus:** Shuffle, repeat modes, offline download with local playback.
 
-## Demo video
-
-Record a 2–3 minute screen recording showing: Home search, playing a song, Mini Player, Queue (add/reorder/remove), full Player (seek, shuffle, repeat), and optionally background playback and download.

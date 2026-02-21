@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useTheme } from '@/context/ThemeContext';
 import { usePlayerStore } from '@/store/playerStore';
+import { useFavoritesStore } from '@/store/favoritesStore';
 import { usePlayerActions } from '@/context/PlayerContext';
 import { navigateToPlayer } from '@/navigation/rootNavigation';
 
@@ -11,6 +12,8 @@ export function MiniPlayer() {
   const currentIndex = usePlayerStore((s) => s.currentIndex);
   const isPlaying = usePlayerStore((s) => s.isPlaying);
   const { play, pause } = usePlayerActions();
+  const toggleFavorite = useFavoritesStore((s) => s.toggle);
+  const isFavorite = useFavoritesStore((s) => s.isFavorite);
 
   const track = queue[currentIndex];
   if (!track) return null;
@@ -39,6 +42,17 @@ export function MiniPlayer() {
       >
         <Text style={styles.controlText}>{isPlaying ? '⏸' : '▶'}</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.heartBtn}
+        onPress={(e) => {
+          e.stopPropagation();
+          toggleFavorite(track);
+        }}
+      >
+        <Text style={[styles.heartIcon, { color: isFavorite(track.id) ? '#E53935' : colors.secondaryText }]}>
+          {isFavorite(track.id) ? '♥' : '♡'}
+        </Text>
+      </TouchableOpacity>
     </TouchableOpacity>
   );
 }
@@ -48,7 +62,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
-    paddingHorizontal: 14,
+    paddingHorizontal: 16,
     borderTopWidth: StyleSheet.hairlineWidth,
   },
   artwork: {
@@ -66,6 +80,9 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
+    marginRight: 8,
   },
   controlText: { color: '#fff', fontSize: 18 },
+  heartBtn: { padding: 8 },
+  heartIcon: { fontSize: 22 },
 });

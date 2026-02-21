@@ -19,6 +19,8 @@ interface SongOptionsSheetProps {
   onPlayNext?: (item: QueueItem) => void;
   onAddToQueue?: (item: QueueItem) => void;
   onAddToPlaylist?: (item: QueueItem) => void;
+  isFavorite?: boolean;
+  onToggleFavorite?: (item: QueueItem) => void;
 }
 
 const OPTIONS = [
@@ -38,6 +40,8 @@ export function SongOptionsSheet({
   onPlayNext,
   onAddToQueue,
   onAddToPlaylist,
+  isFavorite,
+  onToggleFavorite,
 }: SongOptionsSheetProps) {
   const { colors } = useTheme();
   const durationStr = item
@@ -69,9 +73,30 @@ export function SongOptionsSheet({
                     {item.primaryArtists} | {durationStr}
                   </Text>
                 </View>
-                <TouchableOpacity><Text style={styles.heart}>♡</Text></TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => { if (item && onToggleFavorite) onToggleFavorite(item); onClose(); }}
+                  style={styles.heartBtn}
+                >
+                  <Text style={[styles.heart, { color: isFavorite ? '#E53935' : colors.secondaryText }]}>
+                    {isFavorite ? '♥' : '♡'}
+                  </Text>
+                </TouchableOpacity>
               </View>
               <ScrollView style={styles.optionsList} showsVerticalScrollIndicator={false}>
+                {onToggleFavorite && (
+                  <TouchableOpacity
+                    style={[styles.optionRow, { borderBottomColor: colors.border }]}
+                    onPress={() => { if (item) onToggleFavorite(item); onClose(); }}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={[styles.optionIcon, { color: isFavorite ? '#E53935' : colors.primaryText }]}>
+                      {isFavorite ? '♥' : '♡'}
+                    </Text>
+                    <Text style={[styles.optionLabel, { color: colors.primaryText }]}>
+                      {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
+                    </Text>
+                  </TouchableOpacity>
+                )}
                 {OPTIONS.map((opt) => (
                   <TouchableOpacity
                     key={opt.id}
@@ -123,7 +148,8 @@ const styles = StyleSheet.create({
   songInfo: { flex: 1, marginLeft: 12 },
   songTitle: { fontSize: 16, fontWeight: '600' },
   songMeta: { fontSize: 13, marginTop: 2 },
-  heart: { fontSize: 20, padding: 8 },
+  heartBtn: { padding: 8 },
+  heart: { fontSize: 20 },
   optionsList: { paddingHorizontal: 16 },
   optionRow: {
     flexDirection: 'row',

@@ -7,14 +7,17 @@ import { PlayerProvider } from './src/context/PlayerContext';
 import { RootNavigator } from './src/navigation/RootNavigator';
 import { navigationRef } from './src/navigation/rootNavigation';
 import { usePlayerStore } from './src/store/playerStore';
+import { useFavoritesStore } from './src/store/favoritesStore';
 
 function AppContent() {
-  const hydrate = usePlayerStore((s) => s.hydrate);
+  const hydratePlayer = usePlayerStore((s) => s.hydrate);
+  const hydrateFavorites = useFavoritesStore((s) => s.hydrate);
   const isDark = useTheme().isDark;
 
   useEffect(() => {
-    hydrate();
-  }, [hydrate]);
+    hydratePlayer();
+    hydrateFavorites();
+  }, [hydratePlayer, hydrateFavorites]);
 
   return (
     <NavigationContainer ref={navigationRef}>

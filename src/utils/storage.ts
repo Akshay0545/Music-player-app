@@ -50,3 +50,20 @@ export async function getDownloadedIds(): Promise<Record<string, string>> {
 export async function setDownloadedIds(map: Record<string, string>): Promise<void> {
   await AsyncStorage.setItem(DOWNLOADS_KEY, JSON.stringify(map));
 }
+
+const FAVORITES_KEY = '@music_player_favorites';
+
+export async function getStoredFavorites(): Promise<QueueItem[]> {
+  try {
+    const raw = await AsyncStorage.getItem(FAVORITES_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+export async function setStoredFavorites(items: QueueItem[]): Promise<void> {
+  await AsyncStorage.setItem(FAVORITES_KEY, JSON.stringify(items));
+}

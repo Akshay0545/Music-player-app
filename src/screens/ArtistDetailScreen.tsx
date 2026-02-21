@@ -15,6 +15,7 @@ import { useTheme } from '@/context/ThemeContext';
 import { api } from '@/api/client';
 import { searchSongToQueueItem } from '@/api/adapters';
 import { usePlayerStore } from '@/store/playerStore';
+import { useFavoritesStore } from '@/store/favoritesStore';
 import { navigateToPlayer } from '@/navigation/rootNavigation';
 import { SongRow } from '@/components/SongRow';
 import type { QueueItem } from '@/types/player';
@@ -37,6 +38,8 @@ export function ArtistDetailScreen() {
   const [loading, setLoading] = useState(true);
 
   const addToQueue = usePlayerStore((s) => s.addToQueue);
+  const toggleFavorite = useFavoritesStore((s) => s.toggle);
+  const isFavorite = useFavoritesStore((s) => s.isFavorite);
 
   useEffect(() => {
     let cancelled = false;
@@ -119,6 +122,9 @@ export function ArtistDetailScreen() {
             onPress={() => { addToQueue(item, true); navigateToPlayer(); }}
             showPlayButton
             onOptionsPress={() => {}}
+            showFavoriteButton
+            isFavorite={isFavorite(item.id)}
+            onFavoritePress={() => toggleFavorite(item)}
           />
         )}
         contentContainerStyle={styles.list}

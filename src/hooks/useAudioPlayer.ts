@@ -22,7 +22,9 @@ export function useAudioPlayer() {
   const soundRef = useRef<Audio.Sound | null>(null);
   const lastPositionUpdate = useRef(0);
   const loadIdRef = useRef(0);
+  const lastUserSeekRef = useRef(0);
   const POSITION_UPDATE_INTERVAL_MS = 150;
+  const USER_SEEK_GRACE_MS = 600;
 
   const queue = usePlayerStore((s) => s.queue);
   const currentIndex = usePlayerStore((s) => s.currentIndex);
@@ -42,6 +44,7 @@ export function useAudioPlayer() {
     (status: AVPlaybackStatus) => {
       if (!status.isLoaded) return;
       const now = Date.now();
+      if (now - lastUserSeekRef.current < USER_SEEK_GRACE_MS) return;
       const posSec = status.positionMillis / 1000;
       if (now - lastPositionUpdate.current >= POSITION_UPDATE_INTERVAL_MS) {
         lastPositionUpdate.current = now;
@@ -154,6 +157,7 @@ export function useAudioPlayer() {
   const pause = useCallback(() => setPlaying(false), [setPlaying]);
   const seekTo = useCallback(
     async (seconds: number) => {
+      lastUserSeekRef.current = Date.now();
       setPosition(seconds);
       lastPositionUpdate.current = Date.now();
       if (soundRef.current) {

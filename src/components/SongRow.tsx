@@ -10,6 +10,9 @@ interface SongRowProps {
   showPlayButton?: boolean;
   showAddButton?: boolean;
   onAddToQueue?: () => void;
+  showFavoriteButton?: boolean;
+  isFavorite?: boolean;
+  onFavoritePress?: () => void;
 }
 
 export function SongRow({
@@ -19,6 +22,9 @@ export function SongRow({
   showPlayButton = true,
   showAddButton,
   onAddToQueue,
+  showFavoriteButton,
+  isFavorite,
+  onFavoritePress,
 }: SongRowProps) {
   const { colors } = useTheme();
   const durationMin = Math.floor(item.duration / 60);
@@ -50,6 +56,11 @@ export function SongRow({
           }}
         >
           <Text style={styles.playIcon}>▶</Text>
+        </TouchableOpacity>
+      )}
+      {showFavoriteButton && onFavoritePress && (
+        <TouchableOpacity style={styles.favBtn} onPress={(e) => { e.stopPropagation(); onFavoritePress(); }}>
+          <Text style={[styles.favIcon, { color: isFavorite ? '#E53935' : colors.secondaryText }]}>{isFavorite ? '♥' : '♡'}</Text>
         </TouchableOpacity>
       )}
       {showAddButton && onAddToQueue && (
@@ -99,6 +110,8 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
   playIcon: { color: '#fff', fontSize: 14 },
+  favBtn: { padding: 8 },
+  favIcon: { fontSize: 20 },
   addBtn: { paddingVertical: 6, paddingHorizontal: 10 },
   addBtnText: { fontSize: 12, fontWeight: '600' },
   optionsBtn: { padding: 8 },

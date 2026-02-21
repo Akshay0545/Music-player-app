@@ -17,6 +17,7 @@ import { SongRow } from '@/components/SongRow';
 import { api } from '@/api/client';
 import { searchSongToQueueItem } from '@/api/adapters';
 import { usePlayerStore } from '@/store/playerStore';
+import { useFavoritesStore } from '@/store/favoritesStore';
 import { navigateToPlayer } from '@/navigation/rootNavigation';
 import type { QueueItem } from '@/types/player';
 
@@ -29,6 +30,8 @@ export function SearchScreen() {
   const topPadding = Math.max(insets.top, 24) + 20;
 
   const addToQueue = usePlayerStore((s) => s.addToQueue);
+  const toggleFavorite = useFavoritesStore((s) => s.toggle);
+  const isFavorite = useFavoritesStore((s) => s.isFavorite);
 
   const search = useCallback(async () => {
     if (!query.trim()) return;
@@ -80,7 +83,16 @@ export function SearchScreen() {
           data={items}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <SongRow item={item} onPress={() => playSong(item)} showPlayButton onAddToQueue={() => addToQueue(item, false)} showAddButton />
+            <SongRow
+              item={item}
+              onPress={() => playSong(item)}
+              showPlayButton
+              onAddToQueue={() => addToQueue(item, false)}
+              showAddButton
+              showFavoriteButton
+              isFavorite={isFavorite(item.id)}
+              onFavoritePress={() => toggleFavorite(item)}
+            />
           )}
           contentContainerStyle={styles.list}
         />

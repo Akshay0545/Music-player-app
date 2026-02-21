@@ -23,6 +23,7 @@ import { useTheme } from '@/context/ThemeContext';
 import { api } from '@/api/client';
 import { searchSongToQueueItem } from '@/api/adapters';
 import { usePlayerStore } from '@/store/playerStore';
+import { useFavoritesStore } from '@/store/favoritesStore';
 import { navigateToPlayer } from '@/navigation/rootNavigation';
 import type { QueueItem } from '@/types/player';
 import type { ApiSearchArtistItem, ApiSearchAlbumItem } from '@/types/api';
@@ -53,6 +54,8 @@ export function HomeScreen() {
 
   const queue = usePlayerStore((s) => s.queue);
   const addToQueue = usePlayerStore((s) => s.addToQueue);
+  const toggleFavorite = useFavoritesStore((s) => s.toggle);
+  const isFavorite = useFavoritesStore((s) => s.isFavorite);
 
   const loadSongs = useCallback(async (append: boolean) => {
     setLoading(!append);
@@ -228,6 +231,9 @@ export function HomeScreen() {
                   onPress={() => playSong(item)}
                   onOptionsPress={() => setOptionsItem(item)}
                   showPlayButton
+                  showFavoriteButton
+                  isFavorite={isFavorite(item.id)}
+                  onFavoritePress={() => toggleFavorite(item)}
                 />
               )}
               onEndReached={() => {
@@ -298,6 +304,8 @@ export function HomeScreen() {
         item={optionsItem}
         onPlayNext={(i) => { addToQueue(i, true); setOptionsItem(null); navigateToPlayer(); }}
         onAddToQueue={(i) => { addToQueue(i, false); setOptionsItem(null); }}
+        isFavorite={optionsItem ? isFavorite(optionsItem.id) : false}
+        onToggleFavorite={(i) => { if (i) toggleFavorite(i); setOptionsItem(null); }}
       />
     </View>
   );
