@@ -24,7 +24,7 @@ export function useAudioPlayer() {
   const loadIdRef = useRef(0);
   const lastUserSeekRef = useRef(0);
   const POSITION_UPDATE_INTERVAL_MS = 150;
-  const USER_SEEK_GRACE_MS = 600;
+  const USER_SEEK_GRACE_MS = 1200;
 
   const queue = usePlayerStore((s) => s.queue);
   const currentIndex = usePlayerStore((s) => s.currentIndex);

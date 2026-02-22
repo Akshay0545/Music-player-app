@@ -148,8 +148,15 @@ const styles = StyleSheet.create({
   songInfo: { flex: 1, marginLeft: 12 },
   songTitle: { fontSize: 16, fontWeight: '600' },
   songMeta: { fontSize: 13, marginTop: 2 },
-  heartBtn: { padding: 8 },
-  heart: { fontSize: 20 },
+  heartBtn: {
+    minWidth: 40,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'visible',
+  },
+  heart: { fontSize: 20, includeFontPadding: false },
   optionsList: { paddingHorizontal: 16 },
   optionRow: {
     flexDirection: 'row',

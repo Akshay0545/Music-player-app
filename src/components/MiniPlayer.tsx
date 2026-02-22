@@ -62,7 +62,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
-    paddingHorizontal: 16,
+    paddingLeft: 16,
+    paddingRight: 42,
     borderTopWidth: StyleSheet.hairlineWidth,
   },
   artwork: {
@@ -83,6 +84,13 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   controlText: { color: '#fff', fontSize: 18 },
-  heartBtn: { padding: 8 },
-  heartIcon: { fontSize: 22 },
+  heartBtn: {
+    minWidth: 40,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'visible',
+  },
+  heartIcon: { fontSize: 20, includeFontPadding: false },
 });
