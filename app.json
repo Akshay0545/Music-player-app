@@ -1,5 +1,8 @@
 {
   "expo": {
+    "cli": {
+      "appVersionSource": "local"
+    },
     "name": "Music Player",
     "slug": "music-player",
     "version": "1.0.0",
@@ -30,9 +33,6 @@
       "permissions": [
         "android.permission.FOREGROUND_SERVICE",
         "android.permission.WAKE_LOCK",
-        "android.permission.MODIFY_AUDIO_SETTINGS",
-        "android.permission.FOREGROUND_SERVICE",
-        "android.permission.WAKE_LOCK",
         "android.permission.MODIFY_AUDIO_SETTINGS"
       ],
       "package": "com.anonymous.musicplayer"
@@ -44,7 +44,21 @@
           "microphonePermission": false
         }
       ],
-      "expo-asset"
-    ]
+      "expo-asset",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 34,
+            "targetSdkVersion": 34
+          }
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "df8794f8-c5d3-477e-b04e-b3ceb062ef11"
+      }
+    }
   }
 }

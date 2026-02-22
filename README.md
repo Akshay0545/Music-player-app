@@ -19,19 +19,81 @@ npm start
 
 Then scan the QR code with Expo Go (Android) or the Camera app (iOS), or press `a` for Android emulator / `i` for iOS simulator.
 
-### Build APK (EAS Build)
+## Deploy & create APK
 
-```bash
-npx eas-cli login
-npx eas build -p android --profile preview
-```
+### Option 1: EAS Build (recommended – no Android Studio)
 
-Or use a local development build:
+Build an APK in the cloud and download it.
 
-```bash
-npx expo prebuild
-npx expo run:android
-```
+1. **Install EAS CLI and log in**
+   ```bash
+   npm install -g eas-cli
+   eas login
+   ```
+   Create a free [Expo account](https://expo.dev/signup) if needed.
+
+2. **Configure the project (first time only)**
+   ```bash
+   eas build:configure
+   ```
+   This uses the existing `eas.json` (preview profile builds an APK).
+
+3. **Build the Android APK**  
+   **Important:** Run this from the **project root** (`react_native`), not from the `android/` folder.
+   ```bash
+   cd C:\Users\Akshay Kashyap\Desktop\react_native
+   eas build -p android --profile preview
+   ```
+   When the build finishes, Expo gives you a link to **download the APK**. Install it on a device or share the file.
+
+   For a **production** APK (same profile, different name):
+   ```bash
+   eas build -p android --profile production
+   ```
+
+   **If the build failed (e.g. Gradle / “unknown error”):**
+   - Run from the project root (not `android/`).
+   - This project uses the **SDK 52** EAS fixes: `eas.json` has `"image": "sdk-52"` for Android, and `expo-build-properties` is configured in `app.json`. Try rebuilding with `--clear-cache`.
+   - If it still fails, open the build log URL from the terminal and check the **“Run gradlew”** step for the exact error.
+   - Reinstall deps and clear EAS cache, then rebuild:
+     ```bash
+     cd C:\Users\Akshay Kashyap\Desktop\react_native
+     rm -rf node_modules package-lock.json
+     npm install
+     eas build -p android --profile preview --clear-cache
+     ```
+     **On Windows:** `Remove-Item` often fails on long paths in `node_modules`. Use:
+     ```powershell
+     npx rimraf node_modules
+     Remove-Item -Force package-lock.json
+     npm install
+     eas build -p android --profile preview --clear-cache
+     ```
+
+### Option 2: Local build (Android Studio required)
+
+Build on your machine. You need [Android Studio](https://developer.android.com/studio) and the Android SDK installed.
+
+1. **Generate native Android project**
+   ```bash
+   npx expo prebuild -p android
+   ```
+
+2. **Build a debug APK** (quick, for testing)
+   ```bash
+   npx expo run:android
+   ```
+   APK path (after build): `android/app/build/outputs/apk/debug/app-debug.apk`
+
+3. **Build a release APK** (for distribution)
+   ```bash
+   cd android
+   ./gradlew assembleRelease
+   cd ..
+   ```
+   APK path: `android/app/build/outputs/apk/release/app-release.apk`
+
+   For a signed release (required for Play Store), configure signing in `android/app/build.gradle` and use `bundleRelease` for an AAB instead of APK.
 
 ## Architecture
 
