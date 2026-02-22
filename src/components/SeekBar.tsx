@@ -11,7 +11,7 @@ interface SeekBarProps {
 }
 
 const SEEK_CATCH_UP_TOLERANCE = 0.5;
-const STICKY_SEEK_MS = 800;
+const STICKY_SEEK_MS = 1200;
 const LARGE_JUMP_SEC = 2;
 
 function formatTime(seconds: number) {
